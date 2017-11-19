@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+  <head id="meta">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <title>Arbitrage Monitoring</title>
+  </head>
+  <body>
+
+    <div id="app">
+      <div class="col-md-12">
+        <h3>Options:</h3>
+        <div>
+          <label for="id-percent">Arbitrage Percentage Limit:</label>
+          <input id="id-percent" type="number" v-model="percentLimit">
+        </div>
+        <div>
+          <label for="id-sounds">Play Sounds:</label>
+          <input id="id-sounds" type="checkbox" id="checkbox" v-model="playSounds">
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <h3>Buy on Poloniex, Sell on BitBay:</h3>
+            <table class="table table-dark">
+              <tr>
+                <th scope="col">COIN:</th>
+                <th>Ask:</th>
+                <th>Bid:</th>
+                <th>Exchanges Ask/Bid Spread:</th>
+                <th>Coins on market:</th>
+                <th>Coins to Sell (excluded fee):</th>
+                <th>Cost spent:</th>
+                <th>SELL whitout free:</th>
+              </tr>
+              <tr v-for="(item, index) in pairs">
+                <td>{{ item.name }}</td>
+                <td>{{ getCourseByExchangeName(item, 'Poloniex').ask }}</td> 
+                <td>{{ getCourseByExchangeName(item, 'BitBay').bid }}</td>
+                <td>{{ getExchangesSpread(item, 'Poloniex', 'BitBay') }}% <span style="color: red;font-weight:bold;" v-if="hasArbitrage(getExchangesSpread(item, 'Poloniex', 'BitBay'))">ARBITRAGE</span></td>
+                <td>{{ item.coins }}</td>
+                <td>{{ getSellQty(item.coins, 'Poloniex') }}</td>
+                <td>{{ getSellCost(item, 'Poloniex') }}</td>
+                <td>{{ getPLValue(item, 'Poloniex', 'BitBay') }} <span class="alert-success" v-if="getPLValue(item, 'Poloniex', 'BitBay') > 0">PROFIT</span><span class="alert-danger" v-else>LOSS</span></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h3>Buy on BitBay, Sell on Poloniex:</h3>
+                <table class="table table-dark">
+                  <tr>
+                    <th scope="col">COIN:</th>
+                    <th>Ask:</th>
+                    <th>Bid:</th>
+                    <th>Exchanges Ask/Bid Spread:</th>
+                    <th>Coins on market:</th>
+                    <th>Coins to sell (excluded fee):</th>
+                    <th>Cost spent:</th>
+                    <th>SELL whitout free:</th>
+                  </tr>
+                  <tr v-for="(item, index) in pairs">
+                    <td>{{ item.name }}</td>
+                    <td>{{ getCourseByExchangeName(item, 'BitBay').ask }}</td> 
+                    <td>{{ getCourseByExchangeName(item, 'Poloniex').bid }}</td>
+                    <td>{{ getExchangesSpread(item, 'BitBay', 'Poloniex') }}% <span style="color: red;font-weight:bold;" v-if="hasArbitrage(getExchangesSpread(item, 'BitBay', 'Poloniex'))">ARBITRAGE</span></td>
+                    <td>{{ item.coins }}</td>
+                    <td>{{ getSellQty(item.coins, 'BitBay') }}</td>
+                    <td>{{ getSellCost(item, 'BitBay') }}</td>
+                    <td>{{ getPLValue(item, 'BitBay', 'Poloniex') }} <span class="alert-success" v-if="getPLValue(item, 'BitBay', 'Poloniex') > 0">PROFIT</span><span class="alert-danger" v-else>LOSS</span></td>
+                  </tr>
+                </table>
+          </div>
+          <div class="col-md-4">
+         
+          </div>
+        </div>
+      </div><!-- /.container -->
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+  </body>
+</html>
