@@ -26,7 +26,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
-            <h3>Buy on Poloniex, Sell on BitBay:</h3>
+            <h3>Buy on Bittrex, Sell on BitBay:</h3>
             <table class="table table-dark">
               <tr>
                 <th scope="col">COIN:</th>
@@ -40,20 +40,20 @@
               </tr>
               <tr v-for="(item, index) in pairs">
                 <td>{{ item.name }}</td>
-                <td>{{ getCourseByExchangeName(item, 'Poloniex').ask | 8places}}</td> 
+                <td>{{ getCourseByExchangeName(item, 'Bittrex').ask | 8places}}</td> 
                 <td>{{ getCourseByExchangeName(item, 'BitBay').bid | 8places}}</td>
-                <td>{{ getExchangesSpread(item, 'Poloniex', 'BitBay') }}% <span style="color: red;font-weight:bold;" v-if="hasArbitrage(getExchangesSpread(item, 'Poloniex', 'BitBay'))">ARBITRAGE</span></td>
+                <td>{{ getExchangesSpread(item, 'Bittrex', 'BitBay') }}% <span style="color: red;font-weight:bold;" v-if="hasArbitrage(getExchangesSpread(item, 'Bittrex', 'BitBay'))">ARBITRAGE</span></td>
                 <td>{{ item.coins }}</td>
-                <td>{{ getSellQty(item.coins, 'Poloniex') | 8places}}</td>
-                <td>{{ getSellCost(item, 'Poloniex') | 8places }}</td>
-                <td>{{ getPLValue(item, 'Poloniex', 'BitBay') | 8places}} <span class="alert-success" v-if="getPLValue(item, 'Poloniex', 'BitBay') > 0">PROFIT</span><span class="alert-danger" v-else>LOSS</span></td>
+                <td>{{ getSellQty(item.coins, 'Bittrex') | 8places}}</td>
+                <td>{{ getSellCost(item, 'Bittrex') | 8places}}</td>
+                <td>{{ getPLValue(item, 'Bittrex', 'BitBay') | 8places}} <span class="alert-success" v-if="getPLValue(item, 'Bittrex', 'BitBay') > 0">PROFIT</span><span class="alert-danger" v-else>LOSS</span></td>
               </tr>
             </table>
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            <h3>Buy on BitBay, Sell on Poloniex:</h3>
+            <h3>Buy on BitBay, Sell on Bittrex:</h3>
                 <table class="table table-dark">
                   <tr>
                     <th scope="col">COIN:</th>
@@ -68,12 +68,12 @@
                   <tr v-for="(item, index) in pairs">
                     <td>{{ item.name }}</td>
                     <td>{{ getCourseByExchangeName(item, 'BitBay').ask | 8places}}</td> 
-                    <td>{{ getCourseByExchangeName(item, 'Poloniex').bid | 8places}}</td>
-                    <td>{{ getExchangesSpread(item, 'BitBay', 'Poloniex') }}% <span style="color: red;font-weight:bold;" v-if="hasArbitrage(getExchangesSpread(item, 'BitBay', 'Poloniex'))">ARBITRAGE</span></td>
+                    <td>{{ getCourseByExchangeName(item, 'Bittrex').bid | 8places}}</td>
+                    <td>{{ getExchangesSpread(item, 'BitBay', 'Bittrex') }}% <span style="color: red;font-weight:bold;" v-if="hasArbitrage(getExchangesSpread(item, 'BitBay', 'Bittrex'))">ARBITRAGE</span></td>
                     <td>{{ item.coins }}</td>
                     <td>{{ getSellQty(item.coins, 'BitBay') | 8places}}</td>
                     <td>{{ getSellCost(item, 'BitBay') | 8places}}</td>
-                    <td>{{ getPLValue(item, 'BitBay', 'Poloniex') | 8places}} <span class="alert-success" v-if="getPLValue(item, 'BitBay', 'Poloniex') > 0">PROFIT</span><span class="alert-danger" v-else>LOSS</span></td>
+                    <td>{{ getPLValue(item, 'BitBay', 'Bittrex') | 8places}} <span class="alert-success" v-if="getPLValue(item, 'BitBay', 'Bittrex') > 0">PROFIT</span><span class="alert-danger" v-else>LOSS</span></td>
                   </tr>
                 </table>
           </div>
@@ -84,6 +84,6 @@
       </div><!-- /.container -->
     </div>
     <script src="https://unpkg.com/vue"></script>
-    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="./js/main2.js"></script>
   </body>
 </html>

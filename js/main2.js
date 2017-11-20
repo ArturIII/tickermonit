@@ -4,29 +4,6 @@ Vue.filter('8places', value => parseFloat(value).toFixed(8))
 const exchanges = [
   {
     id: 0,
-    name: 'Poloniex',
-    makerFee: 0.25 / 100,
-    takerFee: 0.25 / 100,
-    tickerUrl: 'https://poloniex.com/public?command=returnTicker',
-    praseTicker: function (ticker, pair) {
-      pair = pair.replace('BCC', 'BCH')
-      pair = pair.split('-');
-      const pairTicker = ticker[pair[1] + '_' +pair[0]];
-
-      var ask_value = pairTicker.lowestAsk;
-      var bid_value = pairTicker.highestBid;
-      
-      return {
-        ask: parseFloat(ask_value),
-        bid: parseFloat(bid_value)
-      }
-    },
-    getTickerUrl: function () {
-      return this.tickerUrl
-    }
-  },
-  {
-    id: 1,
     name: 'BitBay',
     makerFee: 0.43 / 100,
     takerFee: 0.43 / 100,
@@ -40,6 +17,25 @@ const exchanges = [
       const pairTickerb = pairName.replace('-', '');
       return `https://bitbay.net/API/Public/${pairTickerb}/ticker.json`
     }
+  },
+  {
+    id: 1,
+    name: 'Bittrex',
+    makerFee: 0.25 / 100,
+    takerFee: 0.25 / 100,
+    praseTicker: function (ticker, pair) {
+      const responseTicker = ticker.query.results.json.result
+      return {
+        ask: parseFloat(responseTicker.Ask),
+        bid: parseFloat(responseTicker.Bid)
+      }
+    },
+    getTickerUrl: function (pairNameOrygial) {
+      pair = pairNameOrygial.split('-');
+      const pairName = pair[1] + '-' +pair[0];
+      
+      return `https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20json%20where%20url%20%3D%20%27https%3A%2F%2Fbittrex.com%2Fapi%2Fv1.1%2Fpublic%2Fgetticker%3Fmarket%3D${pairName}%27&format=json&callback=`
+    }
   }
 ]
 
@@ -48,7 +44,7 @@ const pairList = [
     name: 'GAME-BTC',
     courses: [
       {
-        name: 'Poloniex',
+        name: 'Bittrex',
         ask: 0.00000000,
         bid: 0.00000000
       },
@@ -64,7 +60,7 @@ const pairList = [
     name: 'ETH-BTC',
     courses: [
       {
-        name: 'Poloniex',
+        name: 'Bittrex',
         ask: 0.00000000,
         bid: 0.00000000
       },
@@ -80,7 +76,7 @@ const pairList = [
     name: 'LSK-BTC',
     courses: [
       {
-        name: 'Poloniex',
+        name: 'Bittrex',
         ask: 0.00000000,
         bid: 0.00000000
       },
@@ -96,7 +92,7 @@ const pairList = [
     name: 'LTC-BTC',
     courses: [
       {
-        name: 'Poloniex',
+        name: 'Bittrex',
         ask: 0.00000000,
         bid: 0.00000000
       },
@@ -112,7 +108,7 @@ const pairList = [
     name: 'DASH-BTC',
     courses: [
       {
-        name: 'Poloniex',
+        name: 'Bittrex',
         ask: 0.00000000,
         bid: 0.00000000
       },
@@ -128,7 +124,7 @@ const pairList = [
     name: 'BCC-BTC',
     courses: [
       {
-        name: 'Poloniex',
+        name: 'Bittrex',
         ask: 0.00000000,
         bid: 0.00000000
       },
@@ -145,7 +141,6 @@ const pairList = [
 const app = new Vue({
   el: '#app',
   data: {
-    message: 'Hello Vue!',
     pairs: pairList,
     exchanges,
     percentLimit: 3,
@@ -195,6 +190,7 @@ const app = new Vue({
         exchanges.map(exchange => {
           return fetch(exchange.getTickerUrl(pair.name)).then(resp => resp.json()).then(ticker => {
             const pairTicker = exchange.praseTicker(ticker, pair.name)
+		console.log(pairTicker);
             pair.courses[exchange.id].ask = pairTicker.ask
             pair.courses[exchange.id].bid = pairTicker.bid
           })
